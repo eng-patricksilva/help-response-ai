@@ -1,7 +1,5 @@
-﻿using HelpResponse.AI.Domain.Challenges.Mappers;
-using HelpResponse.AI.Domain.Settings;
+﻿using HelpResponse.AI.Domain.Settings;
 using HelpResponse.AI.Services;
-using HelpResponse.AI.WebApi.Filters;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -29,7 +27,6 @@ public static class StartupExtensions
 
         services.AddControllers(options =>
         {
-            options.Filters.Add<GlobalResponseFilter>();
             options.Conventions.Add(new RouteTokenTransformerConvention(new LowercaseTransformer()));
         }).AddNewtonsoftJson(options =>
         {
@@ -50,7 +47,7 @@ public static class StartupExtensions
 
         services.AddSwaggerExtension(apiSettings);
 
-        services.AddAutoMapper(typeof(ChallengeMapperProfile));
+        //services.AddAutoMapper(typeof(ConversationMapperProfile));
 
         services.RegisterServices();
 

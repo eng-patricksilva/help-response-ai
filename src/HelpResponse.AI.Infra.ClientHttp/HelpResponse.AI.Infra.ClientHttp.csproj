@@ -4,4 +4,8 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>1701;1702;1705;1591</NoWarn>
 	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="Refit" Version="9.0.2" />
+	  <PackageReference Include="Refit.HttpClientFactory" Version="9.0.2" />
+	</ItemGroup>
 </Project>
