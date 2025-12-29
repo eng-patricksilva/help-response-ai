@@ -1,0 +1,10 @@
+﻿trigger:
+  branches:
+    include:
+      - hotfix/*
+      - main
+      - develop
+      - homolog
+
+workspace:
+  clean: all
