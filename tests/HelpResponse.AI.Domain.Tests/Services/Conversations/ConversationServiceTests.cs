@@ -19,7 +19,7 @@ public class ConversationServiceTests
     public async Task ProccessConversationsAsync_WhenProccessConversations_ShouldReturnSuccess()
     {
         //Arrange
-        var conversationServices = new ConversationService(loggerMock.Object);
+        var conversationServices = new ConversationService(loggerMock.Object, default, default, default, default);
         var request = new ConversationRequest
         {
 

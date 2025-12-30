@@ -1,8 +1,10 @@
-﻿using HelpResponse.AI.Domain.Settings;
+﻿using HelpResponse.AI.Infra.ClientHttp.ClaudiaDbClientHttp.Configuration;
+using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Configuration;
 using HelpResponse.AI.WebApi.IoC;
 using HelpResponse.AI.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
@@ -19,9 +21,12 @@ _ = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
 
 builder.Logging.AddSerilog(builder.Configuration);
 
+builder.Services.Configure<OpenAiApi>(builder.Configuration.GetSection("ClientIntegrations:OpenAIApi"));
+builder.Services.Configure<ClaudiaDbApi>(builder.Configuration.GetSection("ClientIntegrations:ClaudiaDbApi"));
+
 var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiConfiguration>();
 
-builder.Services.ConfigureServices(apiSettings);
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 

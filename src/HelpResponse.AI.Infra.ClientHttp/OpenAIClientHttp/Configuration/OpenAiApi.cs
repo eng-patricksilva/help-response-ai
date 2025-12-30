@@ -1,0 +1,9 @@
+﻿namespace HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Configuration
+{
+    public class OpenAiApi
+    {
+        public string Url { get; set; }
+        public string Token { get; set; }
+        public string Model { get; set; }
+    }
+}

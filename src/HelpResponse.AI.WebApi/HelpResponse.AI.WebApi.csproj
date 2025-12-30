@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\HelpResponse.AI.Domain\HelpResponse.AI.Domain.csproj" />
+		<ProjectReference Include="..\HelpResponse.AI.Infra.ClientHttp\HelpResponse.AI.Infra.ClientHttp.csproj" />
 		<ProjectReference Include="..\HelpResponse.AI.Services\HelpResponse.AI.Services.csproj" />
 	</ItemGroup>
 

@@ -1,9 +1,9 @@
-﻿using HelpResponse.AI.Infra.ClientHttp.ApiOpenAIClientHttp.ChatCompletions;
-using HelpResponse.AI.Infra.ClientHttp.ApiOpenAIClientHttp.Embeddings;
+﻿using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.ChatCompletions;
+using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Embeddings;
 using Refit;
 using System.Threading.Tasks;
 
-namespace HelpResponse.AI.Infra.ClientHttp.ApiOpenAIClientHttp
+namespace HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp
 {
     public interface IOpenIAClientApi
     {
