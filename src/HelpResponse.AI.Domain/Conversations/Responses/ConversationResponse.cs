@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace HelpResponse.AI.Domain.Conversations.Responses
 {
     public class ConversationResponse
     {
         public List<ConversationMessageResponse> Messages { get; set; }
-        public bool HandoverToHumanNeeded { get; set; }
+        public bool HandoverToHumanNeeded => HasHumanHandover();
         public List<SectionsRetrieved> SectionsRetrieved { get; set; }
 
         public static ConversationResponse Create() => new();
@@ -26,7 +27,7 @@ namespace HelpResponse.AI.Domain.Conversations.Responses
             return this;
         }
 
-        public ConversationResponse AddRetrieved(float score, string content)
+        public ConversationResponse AddRetrieved(float score, string content, string type)
         {
             if (string.IsNullOrWhiteSpace(content))
                 throw new System.ArgumentException("Section content cannot be null or whitespace.", nameof(content));
@@ -37,10 +38,13 @@ namespace HelpResponse.AI.Domain.Conversations.Responses
             SectionsRetrieved.Add(new SectionsRetrieved
             {
                 Score = score,
-                Content = content
+                Content = content,
+                Type = type
             });
             return this;
         }
+
+        public bool HasHumanHandover() => SectionsRetrieved.Exists(section => section.Type.Equals("N2", System.StringComparison.CurrentCultureIgnoreCase));
     }
 
     public class ConversationMessageResponse
@@ -53,5 +57,8 @@ namespace HelpResponse.AI.Domain.Conversations.Responses
     {
         public float Score { get; set; }
         public string Content { get; set; }
+
+        [JsonIgnore]
+        public string Type { get; set; }
     }
 }

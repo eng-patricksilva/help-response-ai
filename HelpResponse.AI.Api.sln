@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{E45E19F0-35EB-4EDF-9B13-E298350C197D}"
 EndProject
@@ -9,21 +9,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Services", "2 - Service
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{7E933BEC-74B4-472E-9CEA-67747F9BE3CE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{250A104F-1AD2-4D72-BE38-F8FFA31A124F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpResponse.AI.WebApi", "src\HelpResponse.AI.WebApi\HelpResponse.AI.WebApi.csproj", "{8AAE469B-6B9A-450A-8148-7AAE6FDE2A02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpResponse.AI.Services", "src\HelpResponse.AI.Services\HelpResponse.AI.Services.csproj", "{89656B2D-72CC-46BE-B8B4-1B0B1E10EFBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpResponse.AI.Domain", "src\HelpResponse.AI.Domain\HelpResponse.AI.Domain.csproj", "{17A067C7-2172-49E7-85BA-3D4B667F02FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpResponse.AI.Tests", "tests\HelpResponse.AI.Domain.Tests\HelpResponse.AI.Tests.csproj", "{D663CB3C-F616-4FC8-8E35-6E0B07F484B1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - Infrastructure", "{91BCBF3A-547A-488E-B71D-C35A3DC81B3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.1 - Client Http", "4.1 - Client Http", "{64F8275B-CADF-45B1-A8BE-CC2FDE52905C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpResponse.AI.Infra.ClientHttp", "src\HelpResponse.AI.Infra.ClientHttp\HelpResponse.AI.Infra.ClientHttp.csproj", "{0F16DF1C-CA35-2823-392D-982F65824BCA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +41,14 @@ Global
 		{17A067C7-2172-49E7-85BA-3D4B667F02FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17A067C7-2172-49E7-85BA-3D4B667F02FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17A067C7-2172-49E7-85BA-3D4B667F02FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D663CB3C-F616-4FC8-8E35-6E0B07F484B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D663CB3C-F616-4FC8-8E35-6E0B07F484B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D663CB3C-F616-4FC8-8E35-6E0B07F484B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D663CB3C-F616-4FC8-8E35-6E0B07F484B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F16DF1C-CA35-2823-392D-982F65824BCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F16DF1C-CA35-2823-392D-982F65824BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F16DF1C-CA35-2823-392D-982F65824BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F16DF1C-CA35-2823-392D-982F65824BCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,7 +57,6 @@ Global
 		{8AAE469B-6B9A-450A-8148-7AAE6FDE2A02} = {E45E19F0-35EB-4EDF-9B13-E298350C197D}
 		{89656B2D-72CC-46BE-B8B4-1B0B1E10EFBA} = {9F12C42B-0D5E-4002-A166-AB1EEB0A2618}
 		{17A067C7-2172-49E7-85BA-3D4B667F02FF} = {7E933BEC-74B4-472E-9CEA-67747F9BE3CE}
-		{D663CB3C-F616-4FC8-8E35-6E0B07F484B1} = {250A104F-1AD2-4D72-BE38-F8FFA31A124F}
 		{64F8275B-CADF-45B1-A8BE-CC2FDE52905C} = {91BCBF3A-547A-488E-B71D-C35A3DC81B3E}
 		{0F16DF1C-CA35-2823-392D-982F65824BCA} = {64F8275B-CADF-45B1-A8BE-CC2FDE52905C}
 	EndGlobalSection
