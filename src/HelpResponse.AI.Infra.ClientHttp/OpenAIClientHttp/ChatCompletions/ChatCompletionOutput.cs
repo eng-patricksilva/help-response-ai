@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HelpResponse.AI.Infra.ClientHttp.ApiOpenAIClientHttp.ChatCompletions
+namespace HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.ChatCompletions
 {
     public class ChatCompletionOutput
     {

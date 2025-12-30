@@ -1,4 +1,4 @@
-﻿namespace HelpResponse.AI.Domain.Settings
+﻿namespace HelpResponse.AI.WebApi.IoC
 {
     public class ApiConfiguration
     {

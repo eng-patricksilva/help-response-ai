@@ -1,4 +1,4 @@
-﻿using HelpResponse.AI.Domain.Settings;
+﻿using HelpResponse.AI.Infra.ClientHttp;
 using HelpResponse.AI.Services;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +12,10 @@ namespace HelpResponse.AI.WebApi.IoC;
 
 public static class StartupExtensions
 {
-    public static void ConfigureServices(this IServiceCollection services, ApiConfiguration apiSettings)
+    public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var apiSettings = configuration.GetSection("ApiSettings").Get<ApiConfiguration>();
+
         ArgumentNullException.ThrowIfNull(apiSettings?.DefaultRequestTimeout);
 
         services.AddRequestTimeouts(options =>
@@ -50,6 +52,7 @@ public static class StartupExtensions
         //services.AddAutoMapper(typeof(ConversationMapperProfile));
 
         services.RegisterServices();
+        services.RegisterClientHttp(configuration);
 
         services.AddHealthChecks();
     }

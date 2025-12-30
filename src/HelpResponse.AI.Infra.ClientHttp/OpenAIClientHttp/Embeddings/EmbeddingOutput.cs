@@ -1,4 +1,4 @@
-﻿namespace HelpResponse.AI.Infra.ClientHttp.ApiOpenAIClientHttp.Embeddings
+﻿namespace HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Embeddings
 {
     public class EmbeddingOutput
     {
