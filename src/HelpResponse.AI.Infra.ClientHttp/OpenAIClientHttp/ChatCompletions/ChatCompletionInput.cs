@@ -8,9 +8,9 @@ namespace HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.ChatCompletions
         public IEnumerable<MessageInput> Messages { get; set; }
     }
 
-    public class MessageInput
+    public class MessageInput(string role, string template, string message)
     {
-        public string Role { get; set; }
-        public string Content { get; set; }
+        public string Role { get; set; } = role;
+        public string Content { get; set; } = string.Format(template, message);
     }
 }

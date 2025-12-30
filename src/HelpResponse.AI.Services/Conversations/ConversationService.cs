@@ -4,6 +4,7 @@ using HelpResponse.AI.Infra.ClientHttp.ClaudiaDbClientHttp;
 using HelpResponse.AI.Infra.ClientHttp.ClaudiaDbClientHttp.Configuration;
 using HelpResponse.AI.Infra.ClientHttp.ClaudiaDbClientHttp.Searches;
 using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp;
+using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.ChatCompletions;
 using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Configuration;
 using HelpResponse.AI.Infra.ClientHttp.OpenAIClientHttp.Embeddings;
 using Microsoft.Extensions.Logging;
@@ -20,68 +21,83 @@ namespace HelpResponse.AI.Services.Conversations
                                      IOptions<OpenAiApi> openAiOption,
                                      IOptions<ClaudiaDbApi> claudiaDbOption) : IConversationService
     {
+        private const string USER = "user";
+        private const string SYSTEM = "system";
+
         private readonly OpenAiApi _openAiApi = openAiOption.Value;
         private readonly ClaudiaDbApi _claudiaDbApi = claudiaDbOption.Value;
 
         public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
-            var outputEmbedding = await Embed(request);
-
-            var outputVector = await AddVector(outputEmbedding.Data.LastOrDefault()?.Embedding ?? []);
-
-            //var response = _mapper.Map<ConversationResponse>(challenge);
-
-            //return response;
-
-            return new ConversationResponse();
-        }
-
-        private async Task<EmbeddingOutput> Embed(ConversationRequest request)
-        {
             try
             {
-                var embedding = new EmbeddingInput(request.Messages.LastOrDefault()?.Content ?? string.Empty, _openAiApi.Model);
-                return await openAIClientApi.SendEmbeddings(embedding);
+                var inputEmb = new EmbeddingInput(request.Message.Content ?? string.Empty, _openAiApi.Model);
+                var outputEmbedding = await openAIClientApi.SendEmbeddings(inputEmb);
+
+                var inputVector = BuildVector(outputEmbedding.Data.LastOrDefault()?.Embedding ?? []);
+                var outputVector = await claudiaDbClientApi.Search(inputVector);
+
+                var contentMaxScore = outputVector.Value.OrderByDescending(x => x.Searchscore).FirstOrDefault();
+
+                var inputChat = BuildChat(contentMaxScore.Content, inputEmb.Input);
+                var outputChat = await openAIClientApi.SendChatCompletions(inputChat);
+
+                return BuildResponse(outputVector, inputChat, outputChat);
             }
             catch (Refit.ApiException apiEx)
             {
-                logger.LogError(apiEx, "HTTP error occurred while sending embedding: {StatusCode} - {ResponseContent}", apiEx.StatusCode, apiEx.Content);
+                logger.LogError(apiEx, "HTTP error occurred while sending apis: {StatusCode} - {ResponseContent}", apiEx.StatusCode, apiEx.Content);
                 throw new InvalidOperationException(apiEx.Content);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred while sending embedding");
-                throw new InvalidOperationException("Failed to get embedding from OpenAI API", ex);
+                logger.LogError(ex, "Error occurred while sending apis");
+                throw new InvalidOperationException(ex.Message);
             }
         }
 
-        private async Task<SearchOutput> AddVector(float[] vector)
+        private static ConversationResponse BuildResponse(SearchOutput outputVector, ChatCompletionInput inputChat, ChatCompletionOutput outputChat)
         {
-            try
-            {
-                if (vector.Length == 0)
-                    throw new ArgumentException("Vector cannot be empty", nameof(vector));
+            var inputUserMessage = inputChat.Messages.FirstOrDefault(x => x.Role == USER);
+            var choicesMessage = outputChat.Choices.FirstOrDefault();
 
-                var searchInput = new SearchInput(_claudiaDbApi.Count,
-                                                  _claudiaDbApi.Select,
-                                                  _claudiaDbApi.Top,
-                                                  _claudiaDbApi.Filter,
-                                                  vector,
-                                                  _claudiaDbApi.Fields,
-                                                  _claudiaDbApi.Kind);
+            var response = ConversationResponse.Create()
+                                               .AddMessage(inputUserMessage.Content, inputUserMessage.Role)
+                                               .AddMessage(choicesMessage?.Message.Content, choicesMessage.Message.Role);
 
-                return await claudiaDbClientApi.Search(searchInput);
-            }
-            catch (Refit.ApiException apiEx)
+            foreach (var item in outputVector.Value)
+                response = response.AddRetrieved(item.Searchscore, item.Content);
+            return response;
+        }
+
+        private ChatCompletionInput BuildChat(string message, string input)
+        {
+            var system = _openAiApi.PromptTemplates.FirstOrDefault(x => x.Rule == SYSTEM);
+            var user = _openAiApi.PromptTemplates.FirstOrDefault(x => x.Rule == USER);
+
+            return new ChatCompletionInput
             {
-                logger.LogError(apiEx, "HTTP error occurred while sending embedding: {StatusCode} - {ResponseContent}", apiEx.StatusCode, apiEx.Content);
-                throw new InvalidOperationException("Failed to get embedding from OpenAI API", apiEx);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error occurred while sending embedding");
-                throw new InvalidOperationException("Failed to get embedding from OpenAI API", ex);
-            }
+                Model = _openAiApi.ChatCompletionModel,
+                Messages =
+                [
+                    new MessageInput(system.Rule, system.Message, message),
+                    new MessageInput(user.Rule, user.Message, input)
+                ]
+            };
+        }
+
+        private SearchInput BuildVector(float[] vector)
+        {
+            if (vector.Length == 0)
+                throw new ArgumentException("Vector cannot be empty", nameof(vector));
+
+            return new SearchInput(vector,
+                                   _claudiaDbApi.Count,
+                                   _claudiaDbApi.Select,
+                                   _claudiaDbApi.Top,
+                                   _claudiaDbApi.Filter,
+                                   _claudiaDbApi.Fields,
+                                   _claudiaDbApi.Kind);
         }
     }
 }

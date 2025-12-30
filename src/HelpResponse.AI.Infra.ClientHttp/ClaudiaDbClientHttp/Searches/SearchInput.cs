@@ -2,11 +2,11 @@
 
 namespace HelpResponse.AI.Infra.ClientHttp.ClaudiaDbClientHttp.Searches
 {
-    public class SearchInput(bool count,
+    public class SearchInput(float[] vector,
+                             bool count,
                              string select,
                              int top,
                              string filter,
-                             float[] vector,
                              string fields,
                              string kind)
     {
