@@ -66,7 +66,7 @@ namespace HelpResponse.AI.Services.Conversations
                                                .AddMessage(choicesMessage?.Message.Content, choicesMessage.Message.Role);
 
             foreach (var item in outputVector.Value)
-                response = response.AddRetrieved(item.Searchscore, item.Content);
+                response = response.AddRetrieved(item.Searchscore, item.Content, item.Type);
             return response;
         }
 

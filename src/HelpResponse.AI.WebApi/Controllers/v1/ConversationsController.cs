@@ -18,11 +18,11 @@ namespace HelpResponse.AI.WebApi.Controllers.v1
         [ProducesResponseType(typeof(ConversationResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApplicationExceptionResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApplicationExceptionResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateConversation([FromBody] ConversationRequest request)
+        public async Task<IActionResult> StartConversation([FromBody] ConversationRequest request)
         {
             return await ExecuteAsync(() =>
             {
-                logger.LogInformation("Creating conversation with Id: {Id}", 1);
+                logger.LogInformation("Starting conversation with Id: {Id}", request.HelpdeskId);
 
                 return conversationService.CreateConversation(request);
             });
